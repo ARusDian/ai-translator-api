@@ -29,8 +29,8 @@ API penerjemah teks dan HTML dari Bahasa Indonesia ke Bahasa Inggris, Mandarin, 
 
 ### 1. Clone Repo & Masuk Folder
 ```bash
-git clone https://github.com/your-org/translator-api.git
-cd translator-api
+git clone https://github.com/ARusDian/ai-translator-api.git
+cd ai-translator-api
 ````
 
 ### 2. Buat `.env`
