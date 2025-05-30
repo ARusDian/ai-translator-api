@@ -1,0 +1,61 @@
+version: "3.9"
+
+services:
+  translator-api:
+    build: .
+    container_name: translator-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - TRANSLATION_API_KEY=de7a2c67a7a7621d6b02e0c8d2f21413d4dff3eb10087d219c1b3efacdb31246
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+    networks:
+      - backend
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: translator-redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+    networks:
+      - backend
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: translator-prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - backend
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: translator-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    environment:
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/translation_api_dashboard.json
+    networks:
+      - backend
+
+volumes:
+  redis-data:
+  grafana-storage:
+
+networks:
+  backend:
+    driver: bridge

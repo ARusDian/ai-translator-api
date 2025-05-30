@@ -1,0 +1,47 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtualenv
+.env/
+.venv/
+env/
+venv/
+
+# Environment variables and secrets
+.env
+*.env
+
+# Logs
+*.log
+
+# Redis dump and data
+dump.rdb
+*.rdb
+redis-data/
+
+# Docker
+*.pid
+*.sock
+*.tar
+*.gz
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# System
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Grafana
+grafana-storage/
+
+# Prometheus
+prometheus-data/

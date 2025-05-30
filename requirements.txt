@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+gunicorn
+transformers
+torch
+redis
+beautifulsoup4
+python-dotenv
+sentencepiece
+sacremoses
+prometheus_client
