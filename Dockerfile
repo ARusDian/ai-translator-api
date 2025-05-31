@@ -7,12 +7,12 @@ RUN pip install --default-timeout=300 --no-cache-dir -r requirements.txt -i http
 
 # === Pre-download HuggingFace models for offline use ===
 RUN mkdir -p models/opus-mt-id-en && \
-    mkdir -p models/nllb-200-distilled-600M && \
-    python -c "from transformers import AutoTokenizer, AutoModelForSeq2SeqLM; \
-               AutoTokenizer.from_pretrained('Helsinki-NLP/opus-mt-id-en', cache_dir='models/opus-mt-id-en'); \
-               AutoModelForSeq2SeqLM.from_pretrained('Helsinki-NLP/opus-mt-id-en', cache_dir='models/opus-mt-id-en'); \
-               AutoTokenizer.from_pretrained('facebook/nllb-200-distilled-600M', cache_dir='models/nllb'); \
-               AutoModelForSeq2SeqLM.from_pretrained('facebook/nllb-200-distilled-600M', cache_dir='models/nllb')"
+    mkdir -p models/nllb && \
+    python -c "\
+from huggingface_hub import snapshot_download; \
+snapshot_download(repo_id='Helsinki-NLP/opus-mt-id-en', cache_dir='models', local_dir='models/opus-mt-id-en', local_dir_use_symlinks=False); \
+snapshot_download(repo_id='facebook/nllb-200-distilled-600M', cache_dir='models', local_dir='models/nllb', local_dir_use_symlinks=False)"
+
 
 COPY . .
 
