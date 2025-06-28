@@ -1,6 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request, Depends
 from fastapi.responses import Response
-from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
 from datetime import datetime
 from dotenv import load_dotenv
 import json
@@ -18,10 +17,6 @@ from src.utils import (
 load_dotenv()
 
 app = FastAPI(title="Indonesian Translation API with Redis and HTML Support (NLLB)")
-
-REQUEST_COUNT = Counter(
-    "translation_api_requests_total", "Total API Requests", ["endpoint"]
-)
 
 
 def verify_api_key(request: Request) -> str:
@@ -43,7 +38,6 @@ def verify_api_key(request: Request) -> str:
 )
 def api_translate(req: TranslateRequest, api_key: str = Depends(verify_api_key)):
     rate_limit(api_key)
-    REQUEST_COUNT.labels(endpoint="/translate").inc()
     try:
         translated = translate_text("id", req.target_lang, req.text)
         log_usage(
@@ -65,7 +59,6 @@ def api_translate_html(
     req: TranslateHtmlRequest, api_key: str = Depends(verify_api_key)
 ):
     rate_limit(api_key)
-    REQUEST_COUNT.labels(endpoint="/translate_html").inc()
     try:
         translated = translate_html_text("id", req.target_lang, req.html)
         log_usage(
@@ -120,11 +113,6 @@ def list_supported_languages():
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
-
-
-@app.get("/metrics")
-def metrics():
-    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 
 @app.on_event("startup")
