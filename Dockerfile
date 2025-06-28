@@ -3,7 +3,7 @@ FROM python:3.10-slim
 WORKDIR /app
 
 COPY requirements.txt ./
-RUN pip install --default-timeout=300 --no-cache-dir -r requirements.txt --disable-pip-version-check
+RUN pip install --default-timeout=300 -r requirements.txt --disable-pip-version-check
 
 # === Pre-download HuggingFace models for offline use ===
 RUN mkdir -p models/opus-mt-id-en && \

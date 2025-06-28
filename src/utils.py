@@ -27,7 +27,7 @@ except redis.exceptions.ResponseError:
 
 SUPPORTED_TARGETS = ["en", "zh", "ar", "ko"]
 MODEL_MAP = {
-    ("id", "en"): "models/opus-mt-id-en",
+    ("id", "en"): "models/nllb",
     ("en", "zh"): "models/nllb",
     ("en", "ar"): "models/nllb",
     ("en", "ko"): "models/nllb",
@@ -92,7 +92,7 @@ def translate_once(text: str, src: str, tgt: str) -> str:
 def translate_text(source: str, target: str, text: str) -> str:
     source = source.lower()
     target = target.lower()
-    text = text.strip()
+    text = text.strip().lower()
 
     if source == target:
         return text
